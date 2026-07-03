@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026世界杯7月3日1/16淘汰赛深度分析</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1f3c 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(90deg, #c8102e, #003087, #c8102e);
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2"/></svg>') repeat;
+            background-size: 80px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .header .subtitle {
+            color: #ffd700;
+            font-size: 1.1em;
+            margin-top: 8px;
+            position: relative;
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        .match-card {
+            background: linear-gradient(145deg, #1e2d4d, #162240);
+            border-radius: 16px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,215,0,0.15);
+        }
+        .match-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 30px;
+            background: linear-gradient(90deg, rgba(200,16,46,0.15), rgba(0,48,135,0.15));
+            border-bottom: 2px solid rgba(255,215,0,0.2);
+        }
+        .match-number {
+            background: #c8102e;
+            color: #fff;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .match-time {
+            color: #ffd700;
+            font-size: 0.95em;
+        }
+        .match-venue {
+            color: #8899bb;
+            font-size: 0.85em;
+        }
+        .vs-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 20px;
+            gap: 20px;
+        }
+        .team-box {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+        }
+        .team-flag {
+            font-size: 3.5em;
+            margin-bottom: 8px;
+        }
+        .team-name {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #fff;
+        }
+        .team-rank {
+            color: #8899bb;
+            font-size: 0.85em;
+            margin-top: 4px;
+        }
+        .vs-text {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255,215,0,0.3);
+        }
+        .odds-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px 20px 20px;
+        }
+        .odds-tag {
+            padding: 4px 14px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .odds-fav { background: rgba(0,200,0,0.2); color: #4dff4d; border: 1px solid rgba(0,200,0,0.3); }
+        .odds-even { background: rgba(255,215,0,0.15); color: #ffd700; border: 1px solid rgba(255,215,0,0.3); }
+        .odds-dog { background: rgba(255,100,100,0.15); color: #ff6b6b; border: 1px solid rgba(255,100,100,0.3); }
+        .analysis-section {
+            padding: 20px 30px 30px;
+        }
+        .section-title {
+            color: #ffd700;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 20px 0 12px;
+            padding-left: 12px;
+            border-left: 3px solid #ffd700;
+        }
+        .section-title:first-child { margin-top: 0; }
+        .analysis-text {
+            color: #c0ccdd;
+            line-height: 1.85;
+            font-size: 0.95em;
+        }
+        .analysis-text strong { color: #fff; }
+        .analysis-text em { color: #ffd700; font-style: normal; }
+        .player-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        .player-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 12px 15px;
+        }
+        .player-name {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+        .player-desc {
+            color: #8899bb;
+            font-size: 0.82em;
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+        .tactics-box {
+            background: rgba(0,48,135,0.12);
+            border: 1px solid rgba(0,48,135,0.25);
+            border-radius: 10px;
+            padding: 15px 18px;
+            margin: 12px 0;
+        }
+        .tactics-box .t-label {
+            color: #5b9cf5;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 6px;
+        }
+        .tactics-box .t-content {
+            color: #b0c4de;
+            font-size: 0.88em;
+            line-height: 1.7;
+        }
+        .prediction-box {
+            background: linear-gradient(135deg, rgba(200,16,46,0.12), rgba(255,215,0,0.08));
+            border: 2px solid rgba(255,215,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0 10px;
+            text-align: center;
+        }
+        .prediction-label {
+            color: #ffd700;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .prediction-score {
+            font-size: 2.8em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(255,215,0,0.4);
+        }
+        .prediction-detail {
+            color: #8899bb;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+        .history-table th {
+            background: rgba(255,215,0,0.1);
+            color: #ffd700;
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 0.85em;
+            border-bottom: 1px solid rgba(255,215,0,0.15);
+        }
+        .history-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.85em;
+            color: #b0c4de;
+        }
+        .group-tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        .tag-1st { background: rgba(0,200,0,0.2); color: #4dff4d; }
+        .tag-2nd { background: rgba(255,215,0,0.15); color: #ffd700; }
+        .tag-3rd { background: rgba(255,100,100,0.15); color: #ff6b6b; }
+        .summary-section {
+            background: linear-gradient(145deg, #1e2d4d, #162240);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255,215,0,0.15);
+        }
+        .summary-title {
+            color: #ffd700;
+            font-size: 1.3em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        .summary-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .summary-vs { color: #8899bb; font-size: 0.9em; }
+        .summary-pred { color: #fff; font-size: 1.5em; font-weight: bold; margin: 8px 0; }
+        .summary-winner { color: #4dff4d; font-size: 0.85em; }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #556677;
+            font-size: 0.8em;
+        }
+        .highlight { color: #ffd700; font-weight: bold; }
+        .height-section {
+            margin: 15px 0;
+        }
+        .height-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .height-team-label {
+            min-width: 80px;
+            text-align: center;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .height-team-label.left { text-align: right; }
+        .height-team-label.right { text-align: left; }
+        .height-bar-track {
+            flex: 1;
+            height: 28px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+        }
+        .height-bar-left {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 14px 0 0 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #fff;
+            transition: width 0.8s ease;
+        }
+        .height-bar-right {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            border-radius: 0 14px 14px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #fff;
+            transition: width 0.8s ease;
+        }
+        .height-bar-vs {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7);
+            color: #ffd700;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            font-weight: bold;
+            z-index: 2;
+            white-space: nowrap;
+        }
+        .height-diff {
+            text-align: center;
+            margin: 8px 0 0;
+            font-size: 0.88em;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        .height-advantage {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.82em;
+            margin-top: 5px;
+        }
+        .adv-tall { background: rgba(59,130,246,0.2); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+        .adv-short { background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+        .adv-even { background: rgba(255,255,255,0.08); color: #aaa; border: 1px solid rgba(255,255,255,0.1); }
+        .height-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .height-detail-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.82em;
+        }
+        .height-detail-item .hd-label { color: #8899bb; margin-bottom: 3px; }
+        .height-detail-item .hd-value { color: #fff; font-weight: bold; }
+        .height-detail-item .hd-tallest { color: #ffd700; }
+        ul { padding-left: 20px; margin: 8px 0; }
+        li { margin: 6px 0; line-height: 1.6; }
+        .culture-box {
+            background: rgba(200,16,46,0.08);
+            border-left: 3px solid #c8102e;
+            padding: 12px 15px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .culture-box .c-title {
+            color: #ff6b6b;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .culture-box .c-text {
+            color: #b0c4de;
+            font-size: 0.88em;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>⚽ 2026 美加墨世界杯</h1>
+    <div class="subtitle">7月3日 · 1/16淘汰赛（32强） · 三场焦点战深度分析</div>
+</div>
+
+<div class="container">
+
+<!-- ==================== 第一场 ==================== -->
+<div class="match-card">
+    <div class="match-header">
+        <span class="match-number">第一场 · 1/16决赛</span>
+        <span class="match-time">🕐 7月3日 18:00（美东时间）/ 7月4日 06:00（北京时间）</span>
+        <span class="match-venue">📍 达拉斯体育场 · 德克萨斯州</span>
+    </div>
+    <div class="vs-section">
+        <div class="team-box">
+            <div class="team-flag">🇦🇺</div>
+            <div class="team-name">澳大利亚</div>
+            <div class="team-rank">D组第2名 <span class="group-tag tag-2nd">4分 1胜1平1负</span></div>
+        </div>
+        <div class="vs-text">VS</div>
+        <div class="team-box">
+            <div class="team-flag">🇪🇬</div>
+            <div class="team-name">埃及</div>
+            <div class="team-rank">G组第2名 <span class="group-tag tag-2nd">5分 1胜2平0负</span></div>
+        </div>
+    </div>
+    <div class="odds-bar">
+        <span class="odds-tag odds-fav">澳大利亚 小幅热门</span>
+        <span class="odds-tag odds-even">赔率接近 · 胜负难料</span>
+        <span class="odds-tag odds-dog">埃及 +146</span>
+    </div>
+
+    <div class="analysis-section">
+
+        <div class="culture-box">
+            <div class="c-title">🌍 足球文化碰撞</div>
+            <div class="c-text">
+                <strong>澳大利亚"袋鼠军团"</strong>——亚太区的铁血之师。澳洲足球崇尚英式硬朗风格，强调身体对抗与高空球优势，近年来在融入亚洲足球体系后技战术水平不断提升。2022年卡塔尔世界杯闯入16强已创造历史，如今在本土教练波波维奇的带领下，球队更加成熟。<br>
+                <strong>埃及"法老军团"</strong>——非洲足球的古老王朝。埃及是非洲杯历史上最成功的球队（7次夺冠），拥有深厚的足球传统。埃及足球兼具北非技术流与非洲身体素质，球迷热情如火，"穆罕默德·萨拉赫"这个名字就是整个国家的骄傲。
+            </div>
+        </div>
+
+        <div class="section-title">📊 历史交锋</div>
+        <div class="analysis-text">
+            两队在国际A级赛事中交手次数极少，属于"陌生对手"。双方此前仅有过2-3次友谊赛交锋，没有世界杯正赛交手记录。这意味着双方都没有心理包袱，也没有"克星"效应，比赛将更多取决于临场发挥和战术执行力。澳大利亚的世界排名（约第24位）略高于埃及（约第32位），但差距不大。
+        </div>
+
+        <table class="history-table">
+            <tr><th>交锋维度</th><th>🇦🇺 澳大利亚</th><th>🇪🇬 埃及</th></tr>
+            <tr><td>FIFA排名</td><td>~第24位</td><td>~第32位</td></tr>
+            <tr><td>小组赛战绩</td><td>1胜1平1负 · 进2球失2球</td><td>1胜2平0负 · 进5球失3球</td></tr>
+            <tr><td>世界杯最佳成绩</td><td>16强（2022、2006）</td><td>小组赛（多次）</td></tr>
+            <tr><td>洲际冠军</td><td>亚洲杯冠军（2015）</td><td>非洲杯冠军（7次）</td></tr>
+            <tr><td>进攻火力</td><td>偏弱 · 场均0.67球</td><td>较强 · 场均1.67球</td></tr>
+            <tr><td>平均身高</td><td><strong>183.8 cm</strong> 📏</td><td>181.2 cm</td></tr>
+            <tr><td>最高球员</td><td>苏塔尔 198cm</td><td>赫加齐 194cm</td></tr>
+        </table>
+
+        <div class="section-title">⭐ 关键球员</div>
+        <div class="player-grid">
+            <div class="player-card">
+                <div class="player-name">🇦🇺 库西尼·延吉（Kusini Yengi）</div>
+                <div class="player-desc">锋线核心，身体素质出色，擅长背身拿球和头球争顶，是澳洲进攻的桥头堡</div>
+            </div>
+            <div class="player-card">
+                <div class="player-name">🇪🇬 穆罕默德·萨拉赫（Mohamed Salah）</div>
+                <div class="player-desc">利物浦巨星，埃及的绝对灵魂。小组赛贡献进球+助攻，速度与终结能力世界级</div>
+            </div>
+            <div class="player-card">
+                <div class="player-name">🇦🇺 克雷格·古德温（Craig Goodwin）</div>
+                <div class="player-desc">左路飞翼，传中质量高，定位球主罚手，是澳洲进攻的重要发起点</div>
+            </div>
+            <div class="player-card">
+                <div class="player-name">🇪🇬 穆罕默德·埃尔内尼（Mohamed Elneny）</div>
+                <div class="player-desc">中场节拍器，阿森纳旧将，经验丰富，控制比赛节奏的关键人物</div>
+            </div>
+        </div>
+
+        <div class="section-title">🔧 战术分析</div>
+        <div class="tactics-box">
+            <div class="t-label">🇦🇺 澳大利亚打法：4-4-2 / 4-2-3-1 务实防反</div>
+            <div class="t-content">
+                波波维奇执教下的澳洲队纪律严明，防守端阵型紧凑，善于利用身体优势进行高位逼抢。进攻端依赖边路传中和定位球，延吉的高空威胁是重要武器。中场拼抢凶狠，但控球能力一般，面对技术型球队时倾向于收缩防线打反击。弱点在于创造力不足，面对密集防守时缺乏破局手段。
+            </div>
+        </div>
+        <div class="tactics-box">
+            <div class="t-label">🇪🇬 埃及打法：4-3-3 萨拉赫驱动型进攻</div>
+            <div class="t-content">
+                埃及的战术体系围绕萨拉赫构建。右路是主攻方向，萨拉赫内切后的左脚射门是最大杀招。中场三人组负责拦截和过渡，为前场三叉戟输送弹药。埃及小组赛进5球展现出不错的进攻效率，但失3球也暴露了防守端的隐患。球队整体节奏偏慢，但一旦萨拉赫启动加速，反击极具威胁。
+            </div>
+        </div>
+
+        <div class="section-title">📏 双方球员平均身高对比</div>
+        <div class="height-section">
+            <div class="height-bar-container">
+                <div class="height-team-label left" style="color:#60a5fa">🇦🇺 澳大利亚</div>
+                <div class="height-bar-track">
+                    <div class="height-bar-left" style="width:52%">183.8 cm</div>
+                    <div class="height-bar-right" style="width:48%">181.2 cm</div>
+                    <div class="height-bar-vs">差 2.6 cm</div>
+                </div>
+                <div class="height-team-label right" style="color:#fbbf24">🇪🇬 埃及</div>
+            </div>
+            <div class="height-diff">
+                澳大利亚平均身高高出 <strong>2.6 cm</strong>
+                <span class="height-advantage adv-tall">🇦🇺 身高优势方</span>
+            </div>
+            <div class="height-detail">
+                <div class="height-detail-item">
+                    <div class="hd-label">🇦🇺 澳大利亚 · 最高球员</div>
+                    <div class="hd-tallest">哈里·苏塔尔（Harry Souttar）198 cm</div>
+                    <div class="hd-value">中后卫 · 高空防守核心 · 头球威胁极大</div>
+                </div>
+                <div class="height-detail-item">
+                    <div class="hd-label">🇪🇬 埃及 · 最高球员</div>
+                    <div class="hd-tallest">艾哈迈德·赫加齐（Ahmed Hegazi）194 cm</div>
+                    <div class="hd-value">中后卫 · 定位球进攻中的头球利器</div>
+                </div>
+            </div>
+            <div class="analysis-text" style="margin-top:10px">
+                <strong>身高影响分析：</strong>澳大利亚在平均身高上占据明显优势（+2.6cm），这在<em>定位球攻防</em>中尤为关键。苏塔尔198cm的身高在角球和任意球中是巨大威胁，而埃及后防线在面对高空轰炸时将承受巨大压力。不过埃及球员平均身体协调性更好，在地面球争夺中不落下风。
+            </div>
+        </div>
+
+        <div class="section-title">🔮 比赛走向预测</div>
+        <div class="analysis-text">
+            这将是一场<em>势均力敌的拉锯战</em>。澳大利亚会试图用身体对抗压制埃及的技术优势，比赛节奏不会太快。上半场双方可能都比较谨慎，以试探为主。关键在于<em>萨拉赫能否摆脱澳洲后卫的贴身盯防</em>——如果萨拉赫被限制，埃及的进攻威胁将大打折扣。澳大利亚的定位球和高空球是另一大变量，而身高优势让澳洲在这一环节更具威胁。预计下半场随着体能下降，比赛空间增大，进球机会增多。可能需要加时赛甚至点球大战才能决出胜负。
+        </div>
+
+        <div class="prediction-box">
+            <div class="prediction-label">🎯 比分预测</div>
+            <div class="prediction-score">🇦🇺 1 - 1 🇪🇬</div>
+            <div class="prediction-detail">（加时赛澳大利亚 2-1 晋级）<br>澳大利亚凭借更强的整体性和身体优势，在加时赛中艰难取胜</div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 第二场 ==================== -->
+<div class="match-card">
+    <div class="match-header">
+        <span class="match-number">第二场 · 1/16决赛</span>
+        <span class="match-time">🕐 7月3日 22:00（美东时间）/ 7月4日 10:00（北京时间）</span>
+        <span class="match-venue">📍 迈阿密硬石体育场 · 佛罗里达州</span>
+    </div>
+    <div class="vs-section">
+        <div class="team-box">
+            <div class="team-flag">🇦🇷</div>
+            <div class="team-name">阿根廷</div>
+            <div class="team-rank">J组第1名 <span class="group-tag tag-1st">9分 3胜0平0负</span></div>
+        </div>
+        <div class="vs-text">VS</div>
+        <div class="team-box">
+            <div class="team-flag">🇨🇻</div>
+            <div class="team-name">佛得角</div>
+            <div class="team-rank">H组第2名 <span class="group-tag tag-2nd">3分 0胜3平0负</span></div>
+        </div>
+    </div>
+    <div class="odds-bar">
+        <span class="odds-tag odds-fav">🇦🇷 阿根廷 压倒性热门</span>
+        <span class="odds-tag odds-dog">佛得角 本届最大黑马</span>
+    </div>
+
+    <div class="analysis-section">
+
+        <div class="culture-box">
+            <div class="c-title">🌍 足球文化碰撞</div>
+            <div class="c-text">
+                <strong>阿根廷"潘帕斯雄鹰"</strong>——足球王国的荣耀传承。两届世界杯冠军（1978、1986），2022年卡塔尔世界杯夺冠后梅西封神。阿根廷足球崇尚技术与激情，"Tiki-Taka"与个人才华的完美结合。马拉多纳、梅西、迪斯蒂法诺……这个国家为世界足球贡献了最多的天才。<br>
+                <strong>佛得角"蓝鲨"</strong>——大西洋上的足球奇迹。这个人口仅60万的西非岛国，是<em>本届世界杯最大的惊喜</em>。小组赛三战皆平却成功晋级，展现了惊人的防守韧性和团队精神。佛得角球员大多效力于葡萄牙和法国低级别联赛，但他们用团结和拼搏弥补了个人能力的不足。这是该国历史上首次参加世界杯！
+            </div>
+        </div>
+
+        <div class="section-title">📊 历史交锋</div>
+        <div class="analysis-text">
+            阿根廷与佛得角<em>从未在国际A级赛事中交手</em>，这将是两国足球史上的首次对决。从实力对比来看，这是典型的"巨人 vs 灰姑娘"——阿根廷FIFA排名高居世界前列，而佛得角排名约在70位开外。但足球的魅力正在于此：佛得角已经用三场平局证明了他们不惧任何对手。
+        </div>
+
+        <table class="history-table">
+            <tr><th>交锋维度</th><th>🇦🇷 阿根廷</th><th>🇨🇻 佛得角</th></tr>
+            <tr><td>FIFA排名</td><td>世界第1-2位</td><td>~第70位</td></tr>
+            <tr><td>小组赛战绩</td><td>3胜0平0负 · 进8球失1球</td><td>0胜3平0负 · 进2球失2球</td></tr>
+            <tr><td>世界杯最佳成绩</td><td>冠军（1978、1986、2022）</td><td>首次参赛</td></tr>
+            <tr><td>人口</td><td>4600万</td><td>60万</td></tr>
+            <tr><td>小组赛表现</td><td>统治级 · 全胜零封多场</td><td>铁桶阵 · 三场平局晋级</td></tr>
+            <tr><td>平均身高</td><td><strong>180.5 cm</strong></td><td><strong>179.8 cm</strong> ≈</td></tr>
+            <tr><td>最高球员</td><td>罗梅罗 188cm</td><td>苏恩祖 190cm</td></tr>
+        </table>
+
+        <div class="section-title">⭐ 关键球员</div>
+        <div class="player-grid">
+            <div class="player-card">
+                <div class="player-name">🇦🇷 利昂内尔·梅西（Lionel Messi）</div>
+                <div class="player-desc">39岁的传奇仍在闪耀！本届世界杯已攻入6球并列射手榜首位，小组赛表现统治级。这可能是他最后一届世界杯</div>
+            </div>
+            <div class="player-card">
+                <div class="player-name">🇨🇻 瑞安·门德斯（Ryan Mendes）</div>
+                <div class="player-desc">佛得角进攻核心，效力于土超，速度与技术兼备，是球队反击中的关键人物</div>
+            </div>
+            <div class="player-card">
+                <div class="player-name">🇦🇷 朱利安·阿尔瓦雷斯（Julián Álvarez）</div>
+                <div class="player-desc">曼城前锋，跑动积极、门前嗅觉灵敏，与梅西的配合日趋默契，是锋线重要支点</div>
+            </div>
+            <div class="player-card">
+                <div class="player-name">🇨🇻 达里奥·科佩尔（Dário Kopel）</div>
+                <div class="player-desc">后防中坚，小组赛中带领防线完成三场零封/低失球的壮举，指挥防线能力出众</div>
+            </div>
+        </div>
+
+        <div class="section-title">🔧 战术分析</div>
+        <div class="tactics-box">
+            <div class="t-label">🇦🇷 阿根廷打法：4-3-3 控球压迫</div>
+            <div class="t-content">
+                斯卡洛尼的阿根廷是当今世界最成熟的球队之一。中场由恩佐·费尔南德斯和德保罗掌控节奏，梅西自由游弋寻找空间。进攻手段丰富：梅西的直塞、阿尔瓦雷斯的跑位、边路的传中配合。防守端高位逼抢凶狠，丢球后立即反抢。小组赛8球仅失1球的数据说明攻守两端都处于巅峰状态。
+            </div>
+        </div>
+        <div class="tactics-box">
+            <div class="t-label">🇨🇻 佛得角打法：5-4-1 / 4-5-1 极致防守反击</div>
+            <div class="t-content">
+                佛得角的战术简单而有效：<em>全员退守、密集防守、伺机反击</em>。五后卫或四后卫加中场屏障，将禁区前沿堵得密不透风。三场小组赛仅失2球，证明了这套体系的可靠性。进攻端依靠少数快速球员的反击和定位球机会。面对阿根廷，佛得角几乎确定会摆出"大巴阵"，试图将比赛拖入加时或点球。
+            </div>
+        </div>
+
+        <div class="section-title">📏 双方球员平均身高对比</div>
+        <div class="height-section">
+            <div class="height-bar-container">
+                <div class="height-team-label left" style="color:#60a5fa">🇦🇷 阿根廷</div>
+                <div class="height-bar-track">
+                    <div class="height-bar-left" style="width:50.5%">180.5 cm</div>
+                    <div class="height-bar-right" style="width:49.5%">179.8 cm</div>
+                    <div class="height-bar-vs">差 0.7 cm</div>
+                </div>
+                <div class="height-team-label right" style="color:#fbbf24">🇨🇻 佛得角</div>
+            </div>
+            <div class="height-diff">
+                两队平均身高 <strong>几乎持平</strong>
+                <span class="height-advantage adv-even">⚖️ 身高基本对等</span>
+            </div>
+            <div class="height-detail">
+                <div class="height-detail-item">
+                    <div class="hd-label">🇦🇷 阿根廷 · 最高球员</div>
+                    <div class="hd-tallest">克里斯蒂安·罗梅罗（Cuti Romero）188 cm</div>
+                    <div class="hd-value">中后卫 · 防空铁闸 · 定位球中头球威胁</div>
+                </div>
+                <div class="height-detail-item">
+                    <div class="hd-label">🇨🇻 佛得角 · 最高球员</div>
+                    <div class="hd-tallest">斯托皮拉·苏恩祖（Stopira）190 cm</div>
+                    <div class="hd-value">中后卫 · 后防线制高点 · 争顶核心</div>
+                </div>
+            </div>
+            <div class="analysis-text" style="margin-top:10px">
+                <strong>身高影响分析：</strong>两队平均身高仅差0.7cm，属于<em>基本对等</em>。阿根廷球员身材偏灵巧型，梅西（170cm）、阿尔瓦雷斯（179cm）等攻击手重心低、灵活性强，在狭小空间内的盘带和变向是破密集防守的利器。佛得角后防线身材较为高大，在高空球防守中不吃亏，但面对阿根廷的地面渗透配合时可能因转身速度慢而吃亏。
+            </div>
+        </div>
+
+        <div class="section-title">🔮 比赛走向预测</div>
+        <div class="analysis-text">
+            这是一场<em>实力悬殊但充满故事性</em>的对决。阿根廷将掌握绝对控球权（预计70%+），佛得角全员退守半场。上半场阿根廷可能面对铁桶阵难以破门，但随着比赛推进，佛得角球员体能下降，防线漏洞将逐渐显现。<em>梅西的个人能力是打破僵局的终极武器</em>——他的任意球、突破和传球都能改变比赛。佛得角的反击虽然次数不多，但每次都有威胁。预计阿根廷最终凭借实力优势晋级，但佛得角会赢得全世界的尊重。
+        </div>
+
+        <div class="prediction-box">
+            <div class="prediction-label">🎯 比分预测</div>
+            <div class="prediction-score">🇦🇷 3 - 0 🇨🇻</div>
+            <div class="prediction-detail">阿根廷上半场耐心寻找机会，下半场连入三球锁定胜局<br>梅西有望贡献进球或助攻，继续追逐金靴奖</div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 第三场 ==================== -->
+<div class="match-card">
+    <div class="match-header">
+        <span class="match-number">第三场 · 1/16决赛</span>
+        <span class="match-time">🕐 7月4日 01:30（美东时间）/ 7月4日 13:30（北京时间）</span>
+        <span class="match-venue">📍 堪萨斯城箭头体育场 · 密苏里州</span>
+    </div>
+    <div class="vs-section">
+        <div class="team-box">
+            <div class="team-flag">🇨🇴</div>
+            <div class="team-name">哥伦比亚</div>
+            <div class="team-rank">K组第1名 <span class="group-tag tag-1st">7分 2胜1平0负</span></div>
+        </div>
+        <div class="vs-text">VS</div>
+        <div class="team-box">
+            <div class="team-flag">🇬🇭</div>
+            <div class="team-name">加纳</div>
+            <div class="team-rank">L组第3名 <span class="group-tag tag-3rd">4分 1胜1平1负</span></div>
+        </div>
+    </div>
+    <div class="odds-bar">
+        <span class="odds-tag odds-fav">🇨🇴 哥伦比亚 明显热门</span>
+        <span class="odds-tag odds-even">南美 vs 非洲经典对决</span>
+        <span class="odds-tag odds-dog">加纳 需要奇迹</span>
+    </div>
+
+    <div class="analysis-section">
+
+        <div class="culture-box">
+            <div class="c-title">🌍 足球文化碰撞</div>
+            <div class="c-text">
+                <strong>哥伦比亚"咖啡军团"</strong>——南美足球的艺术流派。哥伦比亚足球融合了南美技术传统与现代战术理念，球风华丽流畅。从巴尔德拉马、阿斯普里拉到哈梅斯·罗德里格斯、路易斯·迪亚兹，哥伦比亚从不缺少天才球员。2014年世界杯哈梅斯的金靴奖表演至今令人难忘。近年来在内斯托尔·洛伦佐执教下，球队攻守更加平衡。<br>
+                <strong>加纳"黑星"</strong>——非洲足球的激情代表。加纳是非洲足球的传统强队，2010年世界杯苏亚雷斯门线手球的"恩怨"至今令人唏嘘。加纳足球以身体素质和爆发力著称，年轻球员层出不穷。虽然近年来实力有所下滑，但"黑星"在大赛中从不缺乏斗志。
+            </div>
+        </div>
+
+        <div class="section-title">📊 历史交锋</div>
+        <div class="analysis-text">
+            两队在世界杯历史上有过经典交锋。<em>2014年巴西世界杯小组赛</em>，哥伦比亚2-1击败加纳，那场比赛中哈梅斯·罗德里格斯打入了一粒精彩的进球。两队在友谊赛中也有过数次交手，总体而言哥伦比亚占据优势。南美球队对阵非洲球队时，技术和战术素养通常是决定性因素。
+        </div>
+
+        <table class="history-table">
+            <tr><th>交锋维度</th><th>🇨🇴 哥伦比亚</th><th>🇬🇭 加纳</th></tr>
+            <tr><td>FIFA排名</td><td>~第12位</td><td>~第45位</td></tr>
+            <tr><td>小组赛战绩</td><td>2胜1平0负 · 进4球失1球</td><td>1胜1平1负 · 小组第三晋级</td></tr>
+            <tr><td>世界杯最佳成绩</td><td>8强（2014）</td><td>8强（2010）</td></tr>
+            <tr><td>防守表现</td><td>极佳 · 仅失1球</td><td>一般 · 有失球</td></tr>
+            <tr><td>历史交锋</td><td colspan="2">2014世界杯：哥伦比亚 2-1 加纳</td></tr>
+            <tr><td>平均身高</td><td>179.6 cm</td><td><strong>181.8 cm</strong> 📏</td></tr>
+            <tr><td>最高球员</td><td>桑切斯 187cm</td><td>吉库 190cm</td></tr>
+        </table>
+
+        <div class="section-title">⭐ 关键球员</div>
+        <div class="player-grid">
+            <div class="player-card">
+                <div class="player-name">🇨🇴 路易斯·迪亚兹（Luis Díaz）</div>
+                <div class="player-desc">利物浦飞翼，速度惊人、突破犀利，是哥伦比亚进攻的头号利器。小组赛表现出色</div>
+            </div>
+            <div class="player-card">
+                <div class="player-name">🇬🇭 穆罕默德·库杜斯（Mohammed Kudus）</div>
+                <div class="player-desc">西汉姆联中场，技术出色、远射能力强，是加纳进攻的最大威胁点</div>
+            </div>
+            <div class="player-card">
+                <div class="player-name">🇨🇴 哈梅斯·罗德里格斯（James Rodríguez）</div>
+                <div class="player-desc">35岁的传奇10号，虽已过巅峰但传球视野和任意球功夫仍在，大赛经验丰富</div>
+            </div>
+            <div class="player-card">
+                <div class="player-name">🇬🇭 乔丹·阿尤（Jordan Ayew）</div>
+                <div class="player-desc">水晶宫前锋，加纳锋线老将，经验丰富，门前嗅觉灵敏，是定位球战术中的重要棋子</div>
+            </div>
+        </div>
+
+        <div class="section-title">🔧 战术分析</div>
+        <div class="tactics-box">
+            <div class="t-label">🇨🇴 哥伦比亚打法：4-2-3-1 技术流进攻</div>
+            <div class="t-content">
+                洛伦佐的哥伦比亚踢的是现代南美足球——技术细腻、节奏变化多端。迪亚兹在左路的突破是最大杀招，哈梅斯在中路的组织调度为全队提供创造力。中场双后腰提供防守保障，让前场四人组可以自由发挥。小组赛仅失1球说明防守同样稳固。哥伦比亚善于控制比赛节奏，能在快慢之间自如切换。
+            </div>
+        </div>
+        <div class="tactics-box">
+            <div class="t-label">🇬🇭 加纳打法：4-3-3 / 4-2-3-1 攻守转换</div>
+            <div class="t-content">
+                加纳在奥托·阿多的执教下踢法务实。防守时阵型收缩为4-5-1，中场形成屏障。进攻时依靠库杜斯的个人能力和边路速度发起反击。加纳球员身体素质出色，在对抗中不吃亏。但球队整体配合不如哥伦比亚默契，面对技术型球队时中场容易失控。作为小组第三名出线，加纳需要用更强的斗志弥补实力差距。
+            </div>
+        </div>
+
+        <div class="section-title">📏 双方球员平均身高对比</div>
+        <div class="height-section">
+            <div class="height-bar-container">
+                <div class="height-team-label left" style="color:#60a5fa">🇨🇴 哥伦比亚</div>
+                <div class="height-bar-track">
+                    <div class="height-bar-left" style="width:48.5%">179.6 cm</div>
+                    <div class="height-bar-right" style="width:51.5%">181.8 cm</div>
+                    <div class="height-bar-vs">差 2.2 cm</div>
+                </div>
+                <div class="height-team-label right" style="color:#fbbf24">🇬🇭 加纳</div>
+            </div>
+            <div class="height-diff">
+                加纳平均身高高出 <strong>2.2 cm</strong>
+                <span class="height-advantage adv-short">🇬🇭 身高优势方</span>
+            </div>
+            <div class="height-detail">
+                <div class="height-detail-item">
+                    <div class="hd-label">🇨🇴 哥伦比亚 · 最高球员</div>
+                    <div class="hd-tallest">达文森·桑切斯（Davinson Sánchez）187 cm</div>
+                    <div class="hd-value">中后卫 · 热刺旧将 · 防空能力出色</div>
+                </div>
+                <div class="height-detail-item">
+                    <div class="hd-label">🇬🇭 加纳 · 最高球员</div>
+                    <div class="hd-tallest">亚历山大·吉库（Alexander Djiku）190 cm</div>
+                    <div class="hd-value">中后卫 · 斯特拉斯堡 · 定位球进攻利器</div>
+                </div>
+            </div>
+            <div class="analysis-text" style="margin-top:10px">
+                <strong>身高影响分析：</strong>加纳在平均身高上高出2.2cm，这与其非洲球员的身体素质优势相符。在<em>角球和定位球攻防</em>中，加纳的身高优势可能成为制造冷门的关键因素。但哥伦比亚球员虽然平均身材稍矮，却拥有更出色的技术和脚下频率——迪亚兹（175cm）和哈梅斯（180cm）在小范围内的控球和传球能力远超对手，<em>以技术弥补身高差距</em>是南美球队的传统优势。
+            </div>
+        </div>
+
+        <div class="section-title">🔮 比赛走向预测</div>
+        <div class="analysis-text">
+            这是一场<em>南美艺术足球与非洲力量足球的经典对决</em>。哥伦比亚在整体实力、战术素养和大赛经验上都占据优势。迪亚兹的突破将给加纳防线制造巨大压力，而加纳很难在中场与哥伦比亚抗衡。不过，加纳的身体素质和反击速度不可小觑，库杜斯的个人能力随时可能制造惊喜。预计哥伦比亚将控制比赛，但加纳会用顽强的防守拖延时间。<em>下半场后半段</em>将是关键——如果哥伦比亚迟迟无法破门，加纳的信心会越来越强。
+        </div>
+
+        <div class="prediction-box">
+            <div class="prediction-label">🎯 比分预测</div>
+            <div class="prediction-score">🇨🇴 2 - 0 🇬🇭</div>
+            <div class="prediction-detail">哥伦比亚凭借技术优势和更高效的进攻终结能力顺利晋级<br>迪亚兹有望成为比赛最佳球员</div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 总结 ==================== -->
+<div class="summary-section">
+    <div class="summary-title">📋 三场比赛预测总览</div>
+    <div class="summary-grid">
+        <div class="summary-item">
+            <div class="summary-vs">🇦🇺 澳大利亚 vs 埃及 🇪🇬</div>
+            <div class="summary-pred">1 - 1（加时2-1）</div>
+            <div class="summary-winner">✅ 澳大利亚晋级</div>
+            <div style="color:#8899bb;font-size:0.78em;margin-top:6px">📏 身高差: 183.8 vs 181.2 cm（澳洲 +2.6cm）</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-vs">🇦🇷 阿根廷 vs 佛得角 🇨🇻</div>
+            <div class="summary-pred">3 - 0</div>
+            <div class="summary-winner">✅ 阿根廷晋级</div>
+            <div style="color:#8899bb;font-size:0.78em;margin-top:6px">📏 身高差: 180.5 vs 179.8 cm（基本持平）</div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-vs">🇨🇴 哥伦比亚 vs 加纳 🇬🇭</div>
+            <div class="summary-pred">2 - 0</div>
+            <div class="summary-winner">✅ 哥伦比亚晋级</div>
+            <div style="color:#8899bb;font-size:0.78em;margin-top:6px">📏 身高差: 179.6 vs 181.8 cm（加纳 +2.2cm）</div>
+        </div>
+    </div>
+</div>
+
+<div class="summary-section">
+    <div class="summary-title">🔑 三场比赛看点总结</div>
+    <div class="analysis-text">
+        <ul>
+            <li><strong>第一场（澳大利亚 vs 埃及）</strong>：最具悬念的一场。萨拉赫能否凭一己之力带领埃及晋级？澳大利亚的身体优势和定位球战术能否奏效？这场比赛极有可能进入加时赛甚至点球大战。</li>
+            <li><strong>第二场（阿根廷 vs 佛得角）</strong>：实力最悬殊但最具情怀的一场。梅西的最后一届世界杯，面对60万人口的"灰姑娘"球队佛得角。阿根廷晋级几乎没有悬念，但佛得角已经创造了历史——能站在这个舞台上本身就是胜利。</li>
+            <li><strong>第三场（哥伦比亚 vs 加纳）</strong>：南美vs非洲的经典对决。哥伦比亚的技术和迪亚兹的个人能力是最大看点。加纳需要拿出2010年世界杯时的斗志才有可能制造冷门。</li>
+        </ul>
+    </div>
+</div>
+
+<div class="footer">
+    <p>📌 免责声明：以上分析基于球队实力、小组赛表现、历史交锋等客观数据，仅供参考娱乐</p>
+    <p>数据来源：FIFA官方 · ESPN · FOX Sports | 生成时间：2026年7月3日</p>
+</div>
+
+</div>
+
+</body>
+</html>
